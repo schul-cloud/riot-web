@@ -1,10 +1,10 @@
 {
-  "name": "riot-web",
-  "productName": "Riot",
+  "name": "messenger-schule",
+  "productName": "messenger.schule",
   "main": "electron_app/src/electron-main.js",
-  "version": "1.5.12",
+  "version": "1.5.0001",
   "description": "A feature-rich client for Matrix.org",
-  "author": "New Vector Ltd.",
+  "author": "New Vector Ltd. & HPI Schul-Cloud",
   "repository": {
     "type": "git",
     "url": "https://github.com/vector-im/riot-web"
@@ -152,7 +152,7 @@
     "webpack-dev-server": "^3.9.0"
   },
   "build": {
-    "appId": "im.riot.app",
+    "appId": "im.messenger.schule",
     "electronVersion": "7.1.12",
     "files": [
       "node_modules/**",
@@ -168,7 +168,7 @@
     "linux": {
       "target": "deb",
       "category": "Network;InstantMessaging;Chat",
-      "maintainer": "support@riot.im",
+      "maintainer": "support@schul-cloud.org",
       "desktop": {
         "StartupWMClass": "riot"
       }
