@@ -26,5 +26,11 @@ jobs:
     - name: Build
       run: |
         yarn install
-        yarn lint
-        yarn test
+        yarn build
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        # Artifact name
+        name: WebDir
+        # Directory containing files to upload
+        path: webapp
