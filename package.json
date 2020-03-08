@@ -4,7 +4,7 @@
   "main": "electron_app/src/electron-main.js",
   "version": "1.5.12.2",
   "description": "A feature-rich client for Matrix.org",
-  "author": "New Vector Ltd. & HPI Schul-Cloud",
+  "author": "New Vector Ltd. & HPI Schul-Cloud Team",
   "repository": {
     "type": "git",
     "url": "https://github.com/schul-cloud/riot-web"
