@@ -2,7 +2,7 @@
   "name": "messenger-schule",
   "productName": "messenger.schule",
   "main": "electron_app/src/electron-main.js",
-  "version": "1.5.12.2",
+  "version": "1.5.11",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd. & HPI Schul-Cloud Team",
   "repository": {
@@ -62,6 +62,7 @@
   },
   "dependencies": {
     "browser-request": "^0.3.3",
+    "electron": "^8.1.0",
     "favico.js": "^0.3.10",
     "gemini-scrollbar": "github:matrix-org/gemini-scrollbar#91e1e566",
     "gfm.css": "^1.1.2",
