@@ -36,6 +36,7 @@ export default class VectorAuthPage extends React.PureComponent {
             background: `center/cover fixed url(${backgroundUrl})`,
         };
 
+
         const modalStyle = {
             position: 'relative',
             background: 'initial',
@@ -66,7 +67,7 @@ export default class VectorAuthPage extends React.PureComponent {
                         { this.props.children }
                     </div>
                 </div>
-                <AuthFooter />
+                {/*<AuthFooter />*/}
             </div>
         );
     }

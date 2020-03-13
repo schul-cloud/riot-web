@@ -119,10 +119,10 @@ function onHashChange(ev) {
 // This will be called whenever the SDK changes screens,
 // so a web page can update the URL bar appropriately.
 function onNewScreen(screen) {
-    console.log("newscreen "+screen);
-    const hash = '#/' + screen;
-    lastLocationHashSet = hash;
-    window.location.hash = hash;
+    console.log("newscreen "+screen + " nochange" + window.location.hash);
+    //const hash = '#/' + screen;
+    //lastLocationHashSet = hash;
+    //window.location.hash = hash;
 }
 
 // We use this to work out what URL the SDK should
@@ -175,7 +175,7 @@ function onTokenLoginCompleted() {
 export async function loadApp() {
     // XXX: the way we pass the path to the worker script from webpack via html in body's dataset is a hack
     // but alternatives seem to require changing the interface to passing Workers to js-sdk
-    const vectorIndexeddbWorkerScript = document.body.dataset.vectorIndexeddbWorkerScript;
+    const vectorIndexeddbWorkerScript = document.getElementById('matrixchat').dataset.vectorIndexeddbWorkerScript;
     if (!vectorIndexeddbWorkerScript) {
         // If this is missing, something has probably gone wrong with
         // the bundling. The js-sdk will just fall back to accessing
