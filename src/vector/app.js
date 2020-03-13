@@ -347,15 +347,22 @@ function loadOlm() {
      * completely impossible with webpack. We do, however, use a hashed
      * filename to avoid caching issues.
      */
+
+    // ToDo: REAL PATH
+    // SdkConfig not initialized yet
+    const assetUrl = 'http://localhost:8080';
+
     return Olm.init({
-        locateFile: () => olmWasmPath,
+        // ToDo: REAL PATH
+        locateFile: () => assetUrl + olmWasmPath,
     }).then(() => {
         console.log("Using WebAssembly Olm");
     }).catch((e) => {
         console.log("Failed to load Olm: trying legacy version", e);
         return new Promise((resolve, reject) => {
             const s = document.createElement('script');
-            s.src = 'olm_legacy.js'; // XXX: This should be cache-busted too
+            // ToDo: REAL PATH
+            s.src = assetUrl + 'olm_legacy.js'; // XXX: This should be cache-busted too
             s.onload = resolve;
             s.onerror = reject;
             document.body.appendChild(s);
