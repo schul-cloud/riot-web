@@ -37,207 +37,27 @@
 <!--        object-src 'self';-->
 <!--        manifest-src 'self';-->
 <!--    ">-->
-    <% for (var i=0; i < htmlWebpackPlugin.files.css.length; i++) {
-        var file = htmlWebpackPlugin.files.css[i];
-        var match = file.match(/^bundles\/.*?\/theme-(.*)\.css$/);
-        if (match) {
-            var title = match[1].charAt(0).toUpperCase() + match[1].slice(1);
-        %>
-           <link rel="stylesheet" disabled="disabled" title="<%= title %>" href="<%= file %>">
-        <% } else { %>
-           <link rel="stylesheet" href="<%= file %>">
-        <% }
-    } %>
+
   </head>
-  <body>
-
-    <h1>My awesome Website</h1>
-
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
-    text
-    <br/>
+  <body style="background: #fdfdff">
 
     <section
         id="matrixchat"
         style="height: 60%; overflow: auto; position: fixed; bottom: 0; right: 5px; max-width: 90%; display: flex"
         data-vector-indexeddb-worker-script="<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>"
     ></section>
-    <script src="<%= htmlWebpackPlugin.files.chunks['bundle'].entry %>"></script>
+    <script async src="<%= htmlWebpackPlugin.files.chunks['bundle'].entry %>"></script>
+    <% for (var i=0; i < htmlWebpackPlugin.files.css.length; i++) {
+    var file = htmlWebpackPlugin.files.css[i];
+    var match = file.match(/^bundles\/.*?\/theme-(.*)\.css$/);
+    if (match) {
+    var title = match[1].charAt(0).toUpperCase() + match[1].slice(1);
+    %>
+        <!--<link rel="stylesheet" disabled="disabled" title="<%= title %>" href="<%= file %>">-->
+    <% } else { %>
+        <link async rel="stylesheet" href="<%= file %>">
+    <% }
+    } %>
 
 
 <!--    <img src="<%= require('matrix-react-sdk/res/img/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>-->
