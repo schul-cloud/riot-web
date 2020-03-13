@@ -1,3 +1,39 @@
+Riot Embed
+==========
+
+Setup
+=====
+
+Much of the functionality in Riot is actually in the `matrix-react-sdk` module. It is possible to set these up in a way that makes it
+easy to track the `feature/embed` branches in git and to make local changes without
+having to manually rebuild each time.
+
+
+Then similarly with `matrix-react-sdk`:
+
+```bash
+git clone https://github.com/maxklenk/matrix-react-sdk.git
+pushd matrix-react-sdk
+git checkout feature/embed
+yarn link
+yarn install
+popd
+```
+
+Finally, build and start Riot itself:
+
+```bash
+git clone https://github.com/maxklenk/riot-web.git
+cd riot-web
+git checkout feature/embed
+yarn link matrix-react-sdk
+yarn install
+yarn start
+```
+
+
+---- Original Riot Readme below ----
+
 Riot
 ====
 
