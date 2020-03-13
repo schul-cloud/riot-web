@@ -348,21 +348,15 @@ function loadOlm() {
      * filename to avoid caching issues.
      */
 
-    // ToDo: REAL PATH
-    // SdkConfig not initialized yet
-    const assetUrl = 'http://localhost:8080';
-
     return Olm.init({
-        // ToDo: REAL PATH
-        locateFile: () => assetUrl + olmWasmPath,
+        locateFile: () => olmWasmPath,
     }).then(() => {
         console.log("Using WebAssembly Olm");
     }).catch((e) => {
         console.log("Failed to load Olm: trying legacy version", e);
         return new Promise((resolve, reject) => {
             const s = document.createElement('script');
-            // ToDo: REAL PATH
-            s.src = assetUrl + 'olm_legacy.js'; // XXX: This should be cache-busted too
+            s.src = __webpack_public_path__ + 'olm_legacy.js'; // XXX: This should be cache-busted too
             s.onload = resolve;
             s.onerror = reject;
             document.body.appendChild(s);

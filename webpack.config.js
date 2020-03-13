@@ -27,6 +27,8 @@ module.exports = (env, argv) => {
     const reactSdkSrcDir = path.resolve(require.resolve("matrix-react-sdk/package.json"), '..', 'src');
     const jsSdkSrcDir = path.resolve(require.resolve("matrix-js-sdk/package.json"), '..', 'src');
 
+    const publicPath = 'http://localhost:8080';
+
     return {
         ...development,
 
@@ -250,9 +252,10 @@ module.exports = (env, argv) => {
                         {
                             // Assets referenced in CSS files
                             issuer: /\.(scss|css)$/,
-                            loader: 'file-loader',
+                            loader: 'url-loader',
                             options: {
                                 esModule: false,
+                                limit: 8000, // Convert images < 8kb to base64 strings
                                 name: '[name].[hash:7].[ext]',
                                 outputPath: getImgOutputPath,
                                 publicPath: function(url, resourcePath) {
@@ -260,20 +263,21 @@ module.exports = (env, argv) => {
                                     // directory, so we adjust the final path to navigate up
                                     // twice.
                                     const outputPath = getImgOutputPath(url, resourcePath);
-                                    return toPublicPath(path.join("../..", outputPath));
+                                    return toPublicPath(path.join("../..", outputPath), publicPath);
                                 },
                             },
                         },
                         {
                             // Assets referenced in HTML and JS files
-                            loader: 'file-loader',
+                            loader: 'url-loader',
                             options: {
                                 esModule: false,
+                                limit: 8000, // Convert images < 8kb to base64 strings
                                 name: '[name].[hash:7].[ext]',
                                 outputPath: getImgOutputPath,
                                 publicPath: function(url, resourcePath) {
                                     const outputPath = getImgOutputPath(url, resourcePath);
-                                    return toPublicPath(outputPath);
+                                    return toPublicPath(outputPath, publicPath);
                                 },
                             },
                         },
@@ -339,6 +343,7 @@ module.exports = (env, argv) => {
             // chunks even after the app is redeployed.
             filename: "bundles/[hash]/[name].js",
             chunkFilename: "bundles/[hash]/[name].js",
+            publicPath: publicPath,
         },
 
         // configuration for the webpack-dev-server
@@ -379,6 +384,6 @@ function getImgOutputPath(url, resourcePath) {
  *
  * @param {string} path Some path to a file.
  */
-function toPublicPath(path) {
-    return path.replace(/\\/g, '/');
+function toPublicPath(path, publicPath) {
+    return publicPath + path.replace(/\\/g, '/');
 }
