@@ -46,6 +46,7 @@ import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import {setTheme} from "matrix-react-sdk/src/theme";
+import {getConfig} from "./getconfig";
 
 import Olm from 'olm';
 
@@ -205,8 +206,13 @@ export async function loadApp() {
     let configJson;
     let configError;
     let configSyntaxError = false;
+    const vectorConfig = document.getElementById('matrixchat').dataset.vectorConfig;
     try {
-        configJson = await platform.getConfig();
+        if (vectorConfig) {
+            configJson = await getConfig(vectorConfig);
+        } else {
+            configJson = await platform.getConfig(vectorConfig);
+        }
     } catch (e) {
         configError = e;
 

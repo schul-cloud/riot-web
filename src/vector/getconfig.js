@@ -33,7 +33,7 @@ export async function getVectorConfig(relativeLocation) {
     }
 }
 
-function getConfig(configJsonFilename) {
+export function getConfig(configJsonFilename) {
     return new Promise(function(resolve, reject) {
         request(
             { method: "GET", url: configJsonFilename, qs: { cachebuster: Date.now() } },
