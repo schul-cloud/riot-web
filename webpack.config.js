@@ -14,11 +14,17 @@ module.exports = (env, argv) => {
         argv.mode = "development";
     }
 
+    // If the assets of the embedded chat will be hosted somewhere else than in the relative folder /bundle
+    // on the same server, a public path can be configured which points to your cdn or another folder.
+    // Only used in production mode:
+    let publicPath = 'https://embed.stomt.com/'; // 'https://your.cdn.com/
+
     const development = {};
     if (argv.mode !== "production") {
         // This makes the sourcemaps human readable for developers. We use eval-source-map
         // because the plain source-map devtool ruins the alignment.
         development['devtool'] = 'eval-source-map';
+        publicPath = '';
     }
 
     // Resolve the directories for the react-sdk and js-sdk for later use. We resolve these early so we
@@ -26,8 +32,6 @@ module.exports = (env, argv) => {
     // directory so we don't have to rely on a index.js or similar file existing.
     const reactSdkSrcDir = path.resolve(require.resolve("matrix-react-sdk/package.json"), '..', 'src');
     const jsSdkSrcDir = path.resolve(require.resolve("matrix-js-sdk/package.json"), '..', 'src');
-
-    const publicPath = 'http://localhost:8080/';
 
     return {
         ...development,

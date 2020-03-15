@@ -31,6 +31,15 @@ yarn install
 yarn start
 ```
 
+DEPLOY
+
+If the assets of the embedded chat will be hosted somewhere else than in the relative folder
+/bundle/ on the same server, a public path can be configured which points to your cdn or another folder.
+It is located in the `webpack.config.js`:
+```
+publicPath = 'https://your.cdn.com/';
+```
+
 
 ---- Original Riot Readme below ----
 
