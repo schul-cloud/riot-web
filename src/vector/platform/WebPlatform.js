@@ -110,7 +110,7 @@ export default class WebPlatform extends VectorBasePlatform {
             request(
                 {
                     method: "GET",
-                    url: "version",
+                    url: __webpack_public_path__ + "version",
                     qs: { cachebuster: Date.now() },
                 },
                 (err, response, body) => {
