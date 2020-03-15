@@ -27,7 +27,7 @@ module.exports = (env, argv) => {
     const reactSdkSrcDir = path.resolve(require.resolve("matrix-react-sdk/package.json"), '..', 'src');
     const jsSdkSrcDir = path.resolve(require.resolve("matrix-js-sdk/package.json"), '..', 'src');
 
-    const publicPath = 'http://localhost:8080';
+    const publicPath = 'http://localhost:8080/';
 
     return {
         ...development,
