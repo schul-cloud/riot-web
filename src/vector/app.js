@@ -251,6 +251,16 @@ export async function loadApp() {
         localStorage.setItem("mx_last_room_id", matrixChatNode.dataset.matrixRoomId);
     }
 
+    if (matrixChatNode.dataset.vectorDefaultToggled) {
+        const toggled = matrixChatNode.dataset.vectorDefaultToggled === 'true';
+        // only set default if not already set
+        if (!localStorage.getItem("mx_room_toggled")) {
+            localStorage.setItem("mx_room_toggled", toggled);
+        }
+        if (!localStorage.getItem("mx_menu_toggled")) {
+            localStorage.setItem("mx_menu_toggled", toggled);
+        }
+    }
 
     const fragparts = parseQsFromFragment(window.location);
     const params = parseQs(window.location);
