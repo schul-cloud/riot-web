@@ -102,11 +102,13 @@ function getScreenFromLocation(location) {
 // Here, we do some crude URL analysis to allow
 // deep-linking.
 function routeUrl(location) {
-    if (!window.matrixChat) return;
+    //if (false) { // TODO: disable url routing
+        if (!window.matrixChat) return;
 
-    console.log("Routing URL ", location.href);
-    const s = getScreenFromLocation(location);
-    window.matrixChat.showScreen(s.screen, s.params);
+        console.log("Routing URL ", location.href);
+        const s = getScreenFromLocation(location);
+        window.matrixChat.showScreen(s.screen, s.params);
+    //}
 }
 
 function onHashChange(ev) {
@@ -120,10 +122,11 @@ function onHashChange(ev) {
 // This will be called whenever the SDK changes screens,
 // so a web page can update the URL bar appropriately.
 function onNewScreen(screen) {
-    console.log("newscreen "+screen + " nochange" + window.location.hash);
-    //const hash = '#/' + screen;
-    //lastLocationHashSet = hash;
-    //window.location.hash = hash;
+    if (false) {  // TODO: disable url routing
+        const hash = '#/' + screen;
+        lastLocationHashSet = hash;
+        window.location.hash = hash;
+    }
 }
 
 // We use this to work out what URL the SDK should
@@ -174,9 +177,10 @@ function onTokenLoginCompleted() {
 }
 
 export async function loadApp() {
+    const matrixChatNode = document.getElementById('matrixchat');
     // XXX: the way we pass the path to the worker script from webpack via html in body's dataset is a hack
     // but alternatives seem to require changing the interface to passing Workers to js-sdk
-    const vectorIndexeddbWorkerScript = document.getElementById('matrixchat').dataset.vectorIndexeddbWorkerScript;
+    const vectorIndexeddbWorkerScript = matrixChatNode.dataset.vectorIndexeddbWorkerScript;
     if (!vectorIndexeddbWorkerScript) {
         // If this is missing, something has probably gone wrong with
         // the bundling. The js-sdk will just fall back to accessing
@@ -206,7 +210,7 @@ export async function loadApp() {
     let configJson;
     let configError;
     let configSyntaxError = false;
-    const vectorConfig = document.getElementById('matrixchat').dataset.vectorConfig;
+    const vectorConfig = matrixChatNode.dataset.vectorConfig;
     try {
         if (vectorConfig) {
             configJson = await getConfig(vectorConfig);
@@ -229,6 +233,24 @@ export async function loadApp() {
 
     // Load language after loading config.json so that settingsDefaults.language can be applied
     await loadLanguage();
+
+    // setup base on config
+    const userId = matrixChatNode.dataset.matrixUserId;
+    const homeserverUrl = matrixChatNode.dataset.matrixHomeserverUrl;
+    const accessToken = matrixChatNode.dataset.matrixAccessToken;
+    if (userId && homeserverUrl && accessToken) {
+        localStorage.setItem("mx_hs_url", homeserverUrl);
+        localStorage.setItem("mx_user_id", userId);
+        localStorage.setItem("mx_access_token", accessToken);
+        localStorage.setItem("mx_is_guest", false);
+    } else if (userId || homeserverUrl || accessToken) {
+        console.error('All three authentication properties have to be set: matrix-user-id, matrix-homeserver-url, matrix-access-token');
+    }
+
+    if (matrixChatNode.dataset.matrixRoomId) {
+        localStorage.setItem("mx_last_room_id", matrixChatNode.dataset.matrixRoomId);
+    }
+
 
     const fragparts = parseQsFromFragment(window.location);
     const params = parseQs(window.location);
@@ -275,7 +297,7 @@ export async function loadApp() {
         const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
         window.matrixChat = ReactDOM.render(
             <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />,
-            document.getElementById('matrixchat'),
+            matrixChatNode,
         );
         return;
     }
@@ -289,7 +311,7 @@ export async function loadApp() {
     if (configError) {
         window.matrixChat = ReactDOM.render(<div className="error">
             Unable to load config file: please refresh the page to try again.
-        </div>, document.getElementById('matrixchat'));
+        </div>, matrixChatNode);
     } else if (validBrowser || acceptInvalidBrowser) {
         platform.startUpdater();
 
@@ -309,7 +331,7 @@ export async function loadApp() {
                     initialScreenAfterLogin={getScreenFromLocation(window.location)}
                     defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
                 />,
-                document.getElementById('matrixchat'),
+                matrixChatNode,
             );
         }).catch(err => {
             console.error(err);
@@ -322,7 +344,7 @@ export async function loadApp() {
             const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
             window.matrixChat = ReactDOM.render(
                 <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />,
-                document.getElementById('matrixchat'),
+                matrixChatNode,
             );
         });
     } else {
@@ -335,7 +357,7 @@ export async function loadApp() {
                 console.log("User accepts the compatibility risks.");
                 loadApp();
             }} />,
-            document.getElementById('matrixchat'),
+            matrixChatNode,
         );
     }
 }
@@ -383,6 +405,10 @@ async function loadLanguage() {
     let langs = [];
 
     if (!prefLang) {
+        const passedLang = document.getElementById('matrixchat').dataset.matrixLang;
+        if (passedLang) {
+            langs.push(passedLang);
+        }
         languageHandler.getLanguagesFromBrowser().forEach((l) => {
             langs.push(...languageHandler.getNormalizedLanguageKeys(l));
         });
@@ -391,7 +417,7 @@ async function loadLanguage() {
     }
     try {
         await languageHandler.setLanguage(langs);
-        document.documentElement.setAttribute("lang", languageHandler.getCurrentLanguage());
+        //document.documentElement.setAttribute("lang", languageHandler.getCurrentLanguage());
     } catch (e) {
         console.error("Unable to set language", e);
     }

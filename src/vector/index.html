@@ -44,8 +44,16 @@
     <section
         id="matrixchat"
         style="height: 60%; overflow: auto; position: fixed; bottom: 0; right: 5px; max-width: 90%; display: flex"
+
         data-vector-indexeddb-worker-script="<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>"
-        data-vector-config="https://embed.stomt.com/config.json"
+        data-vector-config="/config.json"
+
+        data-matrix-room-id=""
+        data-matrix-lang=""
+
+        data-matrix-homeserver-url=""
+        data-matrix-user-id=""
+        data-matrix-access-token=""
     ></section>
     <script async src="<%= htmlWebpackPlugin.files.chunks['bundle'].entry %>"></script>
     <% for (var i=0; i < htmlWebpackPlugin.files.css.length; i++) {
