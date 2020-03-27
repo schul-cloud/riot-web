@@ -184,7 +184,7 @@ export async function loadApp() {
 
     window.addEventListener('hashchange', onHashChange);
 
-    await loadOlm();
+    await loadOlm(__webpack_public_path__);
 
     // set the platform for react sdk
     preparePlatform();

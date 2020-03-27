@@ -57,7 +57,7 @@ export async function loadConfig(): Promise<Error | void> {
     }
 }
 
-export function loadOlm(): Promise<void> {
+export function loadOlm(public_path: string): Promise<void> {
     /* Load Olm. We try the WebAssembly version first, and then the legacy,
      * asm.js version if that fails. For this reason we need to wait for this
      * to finish before continuing to load the rest of the app. In future
@@ -78,7 +78,7 @@ export function loadOlm(): Promise<void> {
         console.log("Failed to load Olm: trying legacy version", e);
         return new Promise((resolve, reject) => {
             const s = document.createElement('script');
-            s.src = __webpack_public_path__ + 'olm_legacy.js'; // XXX: This should be cache-busted too
+            s.src = public_path + 'olm_legacy.js'; // XXX: This should be cache-busted too
             s.onload = resolve;
             s.onerror = reject;
             document.body.appendChild(s);
