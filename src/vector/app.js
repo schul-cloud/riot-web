@@ -191,7 +191,8 @@ export async function loadApp() {
     const platform = PlatformPeg.get();
 
     // Load the config from the platform
-    const configError = await loadConfig();
+    const vectorConfig = matrixChatNode.dataset.vectorConfig;
+    const configError = await loadConfig(vectorConfig);
 
     // Load language after loading config.json so that settingsDefaults.language can be applied
     const passedLang = document.getElementById('matrixchat').dataset.matrixLang;

@@ -20,6 +20,7 @@ limitations under the License.
 // @ts-ignore
 import olmWasmPath from "olm/olm.wasm";
 import Olm from 'olm';
+import {getConfig} from "./getconfig";
 
 import * as languageHandler from 'matrix-react-sdk/src/languageHandler';
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
@@ -40,12 +41,16 @@ export function preparePlatform() {
     }
 }
 
-export async function loadConfig(): Promise<Error | void> {
+export async function loadConfig(configPath: string): Promise<Error | void> {
     const platform = PlatformPeg.get();
 
     let configJson;
     try {
-        configJson = await platform.getConfig();
+        if (configPath) {
+            configJson = await getConfig(configPath);
+        } else {
+            configJson = await platform.getConfig();
+        }
     } catch (e) {
         return e;
     } finally {
