@@ -17,7 +17,7 @@ module.exports = (env, argv) => {
     // If the assets of the embedded chat will be hosted somewhere else than in the relative folder /bundle
     // on the same server, a public path can be configured which points to your cdn or another folder.
     // Only used in production mode:
-    let publicPath = 'https://embed.stomt.com/'; // 'https://your.cdn.com/
+    let publicPath = process.env.PUBLIC_PATH || 'https://embed.stomt.com/'; // 'https://your.cdn.com/
 
     const development = {};
     if (argv.mode !== "production") {
