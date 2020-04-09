@@ -1,3 +1,5 @@
+ARG FROM_IMAGE="nginx:alpine"
+
 # Builder
 FROM node:10 as builder
 
@@ -8,7 +10,8 @@ ARG REACT_SDK_REPO="https://github.com/matrix-org/matrix-react-sdk.git"
 ARG REACT_SDK_BRANCH="master"
 ARG JS_SDK_REPO="https://github.com/matrix-org/matrix-js-sdk.git"
 ARG JS_SDK_BRANCH="master"
-ARG FROM_IMAGE="nginx:alpine"
+
+# Target environment
 ARG PUBLIC_PATH=""
 
 RUN apt-get update && apt-get install -y git dos2unix
@@ -33,8 +36,11 @@ FROM ${FROM_IMAGE}
 
 COPY --from=builder /src/webapp /app
 
-# Insert wasm type into Nginx mime.types file so they load correctly.
-RUN sed -i '3i\ \ \ \ application/wasm wasm\;' /etc/nginx/mime.types
+# Insert wasm type into Nginx mime.types file so they load correctly, if its not included already.
+RUN ! grep -q "application/wasm" /etc/nginx/mime.types && sed -i '3i\ \ \ \ application/wasm wasm\;' /etc/nginx/mime.types
+
+RUN rm -v /etc/nginx/conf.d/default.conf
+COPY nginx-embed.conf /etc/nginx/conf.d/
 
 RUN rm -rf /usr/share/nginx/html \
  && ln -s /app /usr/share/nginx/html
