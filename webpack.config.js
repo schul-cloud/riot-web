@@ -263,10 +263,9 @@ module.exports = (env, argv) => {
                         {
                             // Assets referenced in CSS files
                             issuer: /\.(scss|css)$/,
-                            loader: 'url-loader',
+                            loader: 'file-loader',
                             options: {
                                 esModule: false,
-                                limit: 8000, // Convert images < 8kb to base64 strings
                                 name: '[name].[hash:7].[ext]',
                                 outputPath: getImgOutputPath,
                                 publicPath: function(url, resourcePath) {
@@ -280,10 +279,9 @@ module.exports = (env, argv) => {
                         },
                         {
                             // Assets referenced in HTML and JS files
-                            loader: 'url-loader',
+                            loader: 'file-loader',
                             options: {
                                 esModule: false,
-                                limit: 8000, // Convert images < 8kb to base64 strings
                                 name: '[name].[hash:7].[ext]',
                                 outputPath: getImgOutputPath,
                                 publicPath: function(url, resourcePath) {
