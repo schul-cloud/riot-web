@@ -32,8 +32,8 @@ export default class WebPlatform extends VectorBasePlatform {
         super();
         this.runningVersion = null;
 
-        this.startUpdateCheck = this.startUpdateCheck.bind(this);
-        this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
+        // this.startUpdateCheck = this.startUpdateCheck.bind(this);
+        // this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
     }
 
     getHumanReadableName(): string {

@@ -42,8 +42,8 @@ export default class VectorBasePlatform extends BasePlatform {
         super();
 
         this.showUpdateCheck = false;
-        this.startUpdateCheck = this.startUpdateCheck.bind(this);
-        this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
+        // this.startUpdateCheck = this.startUpdateCheck.bind(this);
+        // this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
     }
 
     async getConfig(): Promise<{}> {

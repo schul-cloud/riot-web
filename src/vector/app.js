@@ -287,7 +287,7 @@ export async function loadApp() {
             Unable to load config file: please refresh the page to try again.
         </div>, matrixChatNode);
     } else if (validBrowser || acceptInvalidBrowser) {
-        platform.startUpdater();
+        //platform.startUpdater();
 
         // Don't bother loading the app until the config is verified
         verifyServerConfig().then((newConfig) => {
