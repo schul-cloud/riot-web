@@ -226,6 +226,13 @@ export async function loadApp() {
         }
     }
 
+    if (matrixChatNode.dataset.vectorForceToggled) {
+        const toggled = matrixChatNode.dataset.vectorForceToggled === 'true';
+        // only set default if not already set
+        localStorage.setItem("mx_room_toggled", toggled);
+        localStorage.setItem("mx_menu_toggled", toggled);
+    }
+
     const fragparts = parseQsFromFragment(window.location);
     const params = parseQs(window.location);
 
