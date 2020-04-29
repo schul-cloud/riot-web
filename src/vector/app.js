@@ -240,18 +240,18 @@ export async function loadApp() {
     // verifying a 3pid (but after we've loaded the config)
     // or if the user is following a deep link
     // (https://github.com/vector-im/riot-web/issues/7378)
-    const preventRedirect = fragparts.params.client_secret || fragparts.location.length > 0;
-
-    if (!preventRedirect) {
-        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        const isAndroid = /Android/.test(navigator.userAgent);
-        if (isIos || isAndroid) {
-            if (document.cookie.indexOf("riot_mobile_redirect_to_guide=false") === -1) {
-                window.location = "mobile_guide/";
-                return;
-            }
-        }
-    }
+    // const preventRedirect = fragparts.params.client_secret || fragparts.location.length > 0;
+    //
+    // if (!preventRedirect) {
+    //     const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    //     const isAndroid = /Android/.test(navigator.userAgent);
+    //     if (isIos || isAndroid) {
+    //         if (document.cookie.indexOf("riot_mobile_redirect_to_guide=false") === -1) {
+    //             window.location = "mobile_guide/";
+    //             return;
+    //         }
+    //     }
+    // }
 
     // as quickly as we possibly can, set a default theme...
     await setTheme();
