@@ -23,13 +23,13 @@ PROJECT_NAME ?= $(basename $(notdir $(GIT_REMOTE_URL)))
 
 DOCKER_BUILD_OPTIONS ?= --pull --no-cache --force-rm --rm
 DOCKER_PUSH_OPTIONS ?=
-DOCKER_IMAGE_NAME ?= schul-cloud/$(PROJECT_NAME)
+DOCKER_IMAGE_NAME ?= embed
 DOCKER_VERSION_TAG ?= $(GIT_BRANCH)_v$(GIT_LATEST_VERSION_TAG)_$(GIT_SHA)
 ifeq ($(GIT_LATEST_VERSION_TAG),)
 DOCKER_VERSION_TAG = $(GIT_BRANCH)_$(GIT_SHA)
 endif
 DOCKER_SHA_TAG ?= $(GIT_SHA)
-DOCKER_HOST = docker.pkg.github.com/
+DOCKER_HOST = docker.pkg.github.com/schul-cloud/$(PROJECT_NAME)/
 
 .PHONY: build
 build: DOCKER_BUILD_OPTIONS += \
