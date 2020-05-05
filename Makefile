@@ -23,17 +23,16 @@ PROJECT_NAME ?= $(basename $(notdir $(GIT_REMOTE_URL)))
 
 DOCKER_BUILD_OPTIONS ?= --pull --no-cache --force-rm --rm
 DOCKER_PUSH_OPTIONS ?=
-DOCKER_IMAGE_NAME ?= embed
+DOCKER_IMAGE_NAME ?= docker.pkg.github.com/schul-cloud/$(PROJECT_NAME)/embed
 DOCKER_VERSION_TAG ?= $(GIT_BRANCH)_v$(GIT_LATEST_VERSION_TAG)_$(GIT_SHA)
 ifeq ($(GIT_LATEST_VERSION_TAG),)
 DOCKER_VERSION_TAG = $(GIT_BRANCH)_$(GIT_SHA)
 endif
 DOCKER_SHA_TAG ?= $(GIT_SHA)
-DOCKER_HOST = docker.pkg.github.com/schul-cloud/$(PROJECT_NAME)/
 
 .PHONY: build
 build: DOCKER_BUILD_OPTIONS += \
-    -t schul-cloud/riot-embed \
+    -t $(DOCKER_IMAGE_NAME) \
 	--build-arg USE_CUSTOM_SDKS=true \
     --build-arg REACT_SDK_REPO="https://github.com/schul-cloud/matrix-react-sdk.git" \
     --build-arg REACT_SDK_BRANCH="feature/embed" \
@@ -46,5 +45,5 @@ build:
 .PHONY: push
 push: DOCKER_PUSH_OPTIONS +=
 push:
-	docker push $(DOCKER_PUSH_OPTIONS) $(DOCKER_HOST)$(DOCKER_IMAGE_NAME):$(DOCKER_VERSION_TAG)
-	docker push $(DOCKER_PUSH_OPTIONS) $(DOCKER_HOST)$(DOCKER_IMAGE_NAME):$(DOCKER_SHA_TAG)
+	docker push $(DOCKER_PUSH_OPTIONS) $(DOCKER_IMAGE_NAME):$(DOCKER_VERSION_TAG)
+	docker push $(DOCKER_PUSH_OPTIONS) $(DOCKER_IMAGE_NAME):$(DOCKER_SHA_TAG)
