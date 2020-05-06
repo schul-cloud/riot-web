@@ -12,11 +12,11 @@ jobs:
         steps:
             - uses: actions/checkout@v2
 
-            - name: Build image
-              run: make build
-
             - name: Docker login (Github)
               run: echo "${{secrets.GITHUB_TOKEN}}" | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
+
+            - name: Build image
+              run: make build
 
             #- name: Docker login (Docker Hub)
             #  run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
