@@ -40,7 +40,7 @@ build: DOCKER_BUILD_OPTIONS += \
     --build-arg JS_SDK_REPO="https://github.com/matrix-org/matrix-js-sdk.git" \
     --build-arg JS_SDK_BRANCH="master" \
     --build-arg PUBLIC_PATH="https://embed.messenger.schule/" \
-    --build-arg FROM_IMAGE="$(DOCKER_PATH):latest"
+    #--build-arg FROM_IMAGE="$(DOCKER_PATH):latest"
 build:
 	docker build $(DOCKER_BUILD_OPTIONS) "$(PROJECT_DIR)"
 
@@ -54,3 +54,4 @@ push: DOCKER_PUSH_OPTIONS +=
 push:
 	docker push $(DOCKER_PUSH_OPTIONS) $(DOCKER_PATH):$(DOCKER_VERSION_TAG)
 	docker push $(DOCKER_PUSH_OPTIONS) $(DOCKER_PATH):$(DOCKER_SHA_TAG)
+	docker push $(DOCKER_PUSH_OPTIONS) $(DOCKER_PATH):latest
