@@ -1,3 +1,77 @@
+Riot Embed
+==========
+
+Setup
+=====
+
+Much of the functionality in Riot is actually in the `matrix-react-sdk` module. It is possible to set these up in a way that makes it
+easy to track the `feature/embed` branches in git and to make local changes without
+having to manually rebuild each time.
+
+
+Then similarly with `matrix-react-sdk`:
+
+```bash
+git clone https://github.com/maxklenk/matrix-react-sdk.git
+pushd matrix-react-sdk
+git checkout feature/embed
+yarn link
+yarn install
+popd
+```
+
+Finally, build and start Riot itself:
+
+```bash
+git clone https://github.com/maxklenk/riot-web.git
+cd riot-web
+git checkout feature/embed
+yarn link matrix-react-sdk
+yarn install
+yarn start
+```
+
+DEPLOY
+
+If the assets of the embedded chat will be hosted somewhere else than in the relative folder
+/bundle/ on the same server, a public path can be configured which points to your cdn or another folder.
+It is located in the `webpack.config.js`:
+```
+publicPath = 'https://your.cdn.com/';
+```
+
+DOCKER
+
+To run the docker build with our dependencies run:
+```
+docker build -t schul-cloud/riot-embed \
+    --build-arg USE_CUSTOM_SDKS=true \
+    --build-arg REACT_SDK_REPO="https://github.com/schul-cloud/matrix-react-sdk.git" \
+    --build-arg REACT_SDK_BRANCH="feature/embed" \
+    --build-arg JS_SDK_REPO="https://github.com/matrix-org/matrix-js-sdk.git" \
+    --build-arg JS_SDK_BRANCH="develop" \
+    --build-arg PUBLIC_PATH="https://embed.messenger.schule/" \
+    .
+```
+
+All following releases should build on top of the previous to be backwards compatible:
+```
+docker build -t schul-cloud/riot-embed \
+    --build-arg USE_CUSTOM_SDKS=true \
+    --build-arg REACT_SDK_REPO="https://github.com/schul-cloud/matrix-react-sdk.git" \
+    --build-arg REACT_SDK_BRANCH="feature/embed" \
+    --build-arg JS_SDK_REPO="https://github.com/matrix-org/matrix-js-sdk.git" \
+    --build-arg JS_SDK_BRANCH="develop" \
+    --build-arg PUBLIC_PATH="https://embed.messenger.schule/" \
+    --build-arg FROM_IMAGE="schul-cloud/riot-embed:latest" \
+    .
+```
+
+
+
+
+---- Original Riot Readme below ----
+
 Riot
 ====
 

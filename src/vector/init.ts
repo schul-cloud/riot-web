@@ -20,6 +20,7 @@ limitations under the License.
 // @ts-ignore
 import olmWasmPath from "olm/olm.wasm";
 import Olm from 'olm';
+import {getConfig} from "./getconfig";
 
 import * as languageHandler from 'matrix-react-sdk/src/languageHandler';
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
@@ -40,12 +41,16 @@ export function preparePlatform() {
     }
 }
 
-export async function loadConfig(): Promise<Error | void> {
+export async function loadConfig(configPath: string): Promise<Error | void> {
     const platform = PlatformPeg.get();
 
     let configJson;
     try {
-        configJson = await platform.getConfig();
+        if (configPath) {
+            configJson = await getConfig(configPath);
+        } else {
+            configJson = await platform.getConfig();
+        }
     } catch (e) {
         return e;
     } finally {
@@ -57,7 +62,7 @@ export async function loadConfig(): Promise<Error | void> {
     }
 }
 
-export function loadOlm(): Promise<void> {
+export function loadOlm(public_path: string): Promise<void> {
     /* Load Olm. We try the WebAssembly version first, and then the legacy,
      * asm.js version if that fails. For this reason we need to wait for this
      * to finish before continuing to load the rest of the app. In future
@@ -78,7 +83,7 @@ export function loadOlm(): Promise<void> {
         console.log("Failed to load Olm: trying legacy version", e);
         return new Promise((resolve, reject) => {
             const s = document.createElement('script');
-            s.src = 'olm_legacy.js'; // XXX: This should be cache-busted too
+            s.src = public_path + 'olm_legacy.js'; // XXX: This should be cache-busted too
             s.onload = resolve;
             s.onerror = reject;
             document.body.appendChild(s);
@@ -94,11 +99,15 @@ export function loadOlm(): Promise<void> {
     });
 }
 
-export async function loadLanguage() {
+export async function loadLanguage(passedLang = null) {
     const prefLang = SettingsStore.getValue("language", null, /*excludeDefault=*/true);
     let langs = [];
 
     if (!prefLang) {
+        if (passedLang) {
+            langs.push(passedLang);
+        }
+
         languageHandler.getLanguagesFromBrowser().forEach((l) => {
             langs.push(...languageHandler.getNormalizedLanguageKeys(l));
         });

@@ -1,12 +1,10 @@
 {
   "minify": true,
-  "classPrefix": "modernizr_",
-  "options": [
-    "setClasses"
-  ],
+  "classPrefix": "mode_",
+  "enableClasses": false,
+  "options": [],
   "feature-detects": [
     "test/css/animations",
-    "test/css/displaytable",
     "test/css/filters",
     "test/css/flexbox",
     "test/css/objectfit",

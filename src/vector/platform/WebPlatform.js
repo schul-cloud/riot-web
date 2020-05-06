@@ -32,8 +32,8 @@ export default class WebPlatform extends VectorBasePlatform {
         super();
         this.runningVersion = null;
 
-        this.startUpdateCheck = this.startUpdateCheck.bind(this);
-        this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
+        // this.startUpdateCheck = this.startUpdateCheck.bind(this);
+        // this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
     }
 
     getHumanReadableName(): string {
@@ -101,23 +101,27 @@ export default class WebPlatform extends VectorBasePlatform {
         // to tell the user that there is a new version.
 
         return new Promise(function(resolve, reject) {
-            request(
-                {
-                    method: "GET",
-                    url: "version",
-                    qs: { cachebuster: Date.now() },
-                },
-                (err, response, body) => {
-                    if (err || response.status < 200 || response.status >= 300) {
-                        if (err === null) err = { status: response.status };
-                        reject(err);
-                        return;
-                    }
+            if (true) { // TODO: disable version checks in config
+                resolve('current');
+            } else {
+                request(
+                    {
+                        method: "GET",
+                        url: __webpack_public_path__ + "version",
+                        qs: { cachebuster: Date.now() },
+                    },
+                    (err, response, body) => {
+                        if (err || response.status < 200 || response.status >= 300) {
+                            if (err === null) err = { status: response.status };
+                            reject(err);
+                            return;
+                        }
 
-                    const ver = body.trim();
-                    resolve(ver);
-                },
-            );
+                        const ver = body.trim();
+                        resolve(ver);
+                    },
+                );
+            }
         });
     }
 

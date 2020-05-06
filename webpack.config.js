@@ -14,11 +14,17 @@ module.exports = (env, argv) => {
         argv.mode = "development";
     }
 
+    // If the assets of the embedded chat will be hosted somewhere else than in the relative folder /bundle
+    // on the same server, a public path can be configured which points to your cdn or another folder.
+    // Only used in production mode:
+    let publicPath = process.env.PUBLIC_PATH || 'https://embed.stomt.com/'; // 'https://your.cdn.com/
+
     const development = {};
     if (argv.mode !== "production") {
         // This makes the sourcemaps human readable for developers. We use eval-source-map
         // because the plain source-map devtool ruins the alignment.
         development['devtool'] = 'eval-source-map';
+        publicPath = '';
     }
 
     // Resolve the directories for the react-sdk and js-sdk for later use. We resolve these early so we
@@ -267,7 +273,7 @@ module.exports = (env, argv) => {
                                     // directory, so we adjust the final path to navigate up
                                     // twice.
                                     const outputPath = getImgOutputPath(url, resourcePath);
-                                    return toPublicPath(path.join("../..", outputPath));
+                                    return toPublicPath(path.join("../..", outputPath), publicPath);
                                 },
                             },
                         },
@@ -280,7 +286,7 @@ module.exports = (env, argv) => {
                                 outputPath: getImgOutputPath,
                                 publicPath: function(url, resourcePath) {
                                     const outputPath = getImgOutputPath(url, resourcePath);
-                                    return toPublicPath(outputPath);
+                                    return toPublicPath(outputPath, publicPath);
                                 },
                             },
                         },
@@ -354,6 +360,7 @@ module.exports = (env, argv) => {
             // chunks even after the app is redeployed.
             filename: "bundles/[hash]/[name].js",
             chunkFilename: "bundles/[hash]/[name].js",
+            publicPath: publicPath,
         },
 
         // configuration for the webpack-dev-server
@@ -394,6 +401,6 @@ function getImgOutputPath(url, resourcePath) {
  *
  * @param {string} path Some path to a file.
  */
-function toPublicPath(path) {
-    return path.replace(/\\/g, '/');
+function toPublicPath(path, publicPath) {
+    return publicPath + path.replace(/\\/g, '/');
 }

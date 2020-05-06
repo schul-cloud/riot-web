@@ -93,11 +93,13 @@ function getScreenFromLocation(location) {
 // Here, we do some crude URL analysis to allow
 // deep-linking.
 function routeUrl(location) {
-    if (!window.matrixChat) return;
+    //if (false) { // TODO: disable url routing
+        if (!window.matrixChat) return;
 
-    console.log("Routing URL ", location.href);
-    const s = getScreenFromLocation(location);
-    window.matrixChat.showScreen(s.screen, s.params);
+        console.log("Routing URL ", location.href);
+        const s = getScreenFromLocation(location);
+        window.matrixChat.showScreen(s.screen, s.params);
+    //}
 }
 
 function onHashChange(ev) {
@@ -111,10 +113,11 @@ function onHashChange(ev) {
 // This will be called whenever the SDK changes screens,
 // so a web page can update the URL bar appropriately.
 function onNewScreen(screen) {
-    console.log("newscreen "+screen);
-    const hash = '#/' + screen;
-    lastLocationHashSet = hash;
-    window.location.hash = hash;
+    if (false) {  // TODO: disable url routing
+        const hash = '#/' + screen;
+        lastLocationHashSet = hash;
+        window.location.hash = hash;
+    }
 }
 
 // We use this to work out what URL the SDK should
@@ -165,9 +168,10 @@ function onTokenLoginCompleted() {
 }
 
 export async function loadApp() {
+    const matrixChatNode = document.getElementById('matrixchat');
     // XXX: the way we pass the path to the worker script from webpack via html in body's dataset is a hack
     // but alternatives seem to require changing the interface to passing Workers to js-sdk
-    const vectorIndexeddbWorkerScript = document.body.dataset.vectorIndexeddbWorkerScript;
+    const vectorIndexeddbWorkerScript = matrixChatNode.dataset.vectorIndexeddbWorkerScript;
     if (!vectorIndexeddbWorkerScript) {
         // If this is missing, something has probably gone wrong with
         // the bundling. The js-sdk will just fall back to accessing
@@ -180,17 +184,54 @@ export async function loadApp() {
 
     window.addEventListener('hashchange', onHashChange);
 
-    await loadOlm();
+    await loadOlm(__webpack_public_path__);
 
     // set the platform for react sdk
     preparePlatform();
     const platform = PlatformPeg.get();
 
     // Load the config from the platform
-    const configError = await loadConfig();
+    const vectorConfig = matrixChatNode.dataset.vectorConfig;
+    const configError = await loadConfig(vectorConfig);
 
     // Load language after loading config.json so that settingsDefaults.language can be applied
-    await loadLanguage();
+    const passedLang = document.getElementById('matrixchat').dataset.matrixLang;
+    await loadLanguage(passedLang);
+
+    // setup base on config
+    const userId = matrixChatNode.dataset.matrixUserId;
+    const homeserverUrl = matrixChatNode.dataset.matrixHomeserverUrl;
+    const accessToken = matrixChatNode.dataset.matrixAccessToken;
+    if (userId && homeserverUrl && accessToken) {
+        localStorage.setItem("mx_hs_url", homeserverUrl);
+        localStorage.setItem("mx_user_id", userId);
+        localStorage.setItem("mx_access_token", accessToken);
+        localStorage.setItem("mx_is_guest", false);
+    } else if (userId || homeserverUrl || accessToken) {
+        console.error('All three authentication properties have to be set: matrix-user-id, matrix-homeserver-url, matrix-access-token');
+    }
+
+    if (matrixChatNode.dataset.matrixRoomId) {
+        localStorage.setItem("mx_last_room_id", matrixChatNode.dataset.matrixRoomId);
+    }
+
+    if (matrixChatNode.dataset.vectorDefaultToggled) {
+        const toggled = matrixChatNode.dataset.vectorDefaultToggled === 'true';
+        // only set default if not already set
+        if (!localStorage.getItem("mx_room_toggled")) {
+            localStorage.setItem("mx_room_toggled", toggled);
+        }
+        if (!localStorage.getItem("mx_menu_toggled")) {
+            localStorage.setItem("mx_menu_toggled", toggled);
+        }
+    }
+
+    if (matrixChatNode.dataset.vectorForceToggled) {
+        const toggled = matrixChatNode.dataset.vectorForceToggled === 'true';
+        // only set default if not already set
+        localStorage.setItem("mx_room_toggled", toggled);
+        localStorage.setItem("mx_menu_toggled", toggled);
+    }
 
     const fragparts = parseQsFromFragment(window.location);
     const params = parseQs(window.location);
@@ -199,18 +240,18 @@ export async function loadApp() {
     // verifying a 3pid (but after we've loaded the config)
     // or if the user is following a deep link
     // (https://github.com/vector-im/riot-web/issues/7378)
-    const preventRedirect = fragparts.params.client_secret || fragparts.location.length > 0;
-
-    if (!preventRedirect) {
-        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        const isAndroid = /Android/.test(navigator.userAgent);
-        if (isIos || isAndroid) {
-            if (document.cookie.indexOf("riot_mobile_redirect_to_guide=false") === -1) {
-                window.location = "mobile_guide/";
-                return;
-            }
-        }
-    }
+    // const preventRedirect = fragparts.params.client_secret || fragparts.location.length > 0;
+    //
+    // if (!preventRedirect) {
+    //     const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    //     const isAndroid = /Android/.test(navigator.userAgent);
+    //     if (isIos || isAndroid) {
+    //         if (document.cookie.indexOf("riot_mobile_redirect_to_guide=false") === -1) {
+    //             window.location = "mobile_guide/";
+    //             return;
+    //         }
+    //     }
+    // }
 
     // as quickly as we possibly can, set a default theme...
     await setTheme();
@@ -237,7 +278,7 @@ export async function loadApp() {
         const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
         window.matrixChat = ReactDOM.render(
             <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />,
-            document.getElementById('matrixchat'),
+            matrixChatNode,
         );
         return;
     }
@@ -251,9 +292,9 @@ export async function loadApp() {
     if (configError) {
         window.matrixChat = ReactDOM.render(<div className="error">
             Unable to load config file: please refresh the page to try again.
-        </div>, document.getElementById('matrixchat'));
+        </div>, matrixChatNode);
     } else if (validBrowser || acceptInvalidBrowser) {
-        platform.startUpdater();
+        //platform.startUpdater();
 
         // Don't bother loading the app until the config is verified
         verifyServerConfig().then((newConfig) => {
@@ -271,7 +312,7 @@ export async function loadApp() {
                     initialScreenAfterLogin={getScreenFromLocation(window.location)}
                     defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
                 />,
-                document.getElementById('matrixchat'),
+                matrixChatNode,
             );
         }).catch(err => {
             console.error(err);
@@ -284,7 +325,7 @@ export async function loadApp() {
             const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
             window.matrixChat = ReactDOM.render(
                 <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />,
-                document.getElementById('matrixchat'),
+                matrixChatNode,
             );
         });
     } else {
@@ -297,10 +338,48 @@ export async function loadApp() {
                 console.log("User accepts the compatibility risks.");
                 loadApp();
             }} />,
-            document.getElementById('matrixchat'),
+            matrixChatNode,
         );
     }
 }
+
+// function loadOlm() {
+//     /* Load Olm. We try the WebAssembly version first, and then the legacy,
+//      * asm.js version if that fails. For this reason we need to wait for this
+//      * to finish before continuing to load the rest of the app. In future
+//      * we could somehow pass a promise down to react-sdk and have it wait on
+//      * that so olm can be loading in parallel with the rest of the app.
+//      *
+//      * We also need to tell the Olm js to look for its wasm file at the same
+//      * level as index.html. It really should be in the same place as the js,
+//      * ie. in the bundle directory, but as far as I can tell this is
+//      * completely impossible with webpack. We do, however, use a hashed
+//      * filename to avoid caching issues.
+//      */
+//
+//     return Olm.init({
+//         locateFile: () => olmWasmPath,
+//     }).then(() => {
+//         console.log("Using WebAssembly Olm");
+//     }).catch((e) => {
+//         console.log("Failed to load Olm: trying legacy version", e);
+//         return new Promise((resolve, reject) => {
+//             const s = document.createElement('script');
+//             s.src = __webpack_public_path__ + 'olm_legacy.js'; // XXX: This should be cache-busted too
+//             s.onload = resolve;
+//             s.onerror = reject;
+//             document.body.appendChild(s);
+//         }).then(() => {
+//             // Init window.Olm, ie. the one just loaded by the script tag,
+//             // not 'Olm' which is still the failed wasm version.
+//             return window.Olm.init();
+//         }).then(() => {
+//             console.log("Using legacy Olm");
+//         }).catch((e) => {
+//             console.log("Both WebAssembly and asm.js Olm failed!", e);
+//         });
+//     });
+// }
 
 async function verifyServerConfig() {
     let validatedConfig;

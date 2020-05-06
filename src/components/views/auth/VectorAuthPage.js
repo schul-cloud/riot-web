@@ -27,7 +27,7 @@ export default class VectorAuthPage extends React.PureComponent {
         const AuthFooter = sdk.getComponent('auth.AuthFooter');
 
         const brandingConfig = SdkConfig.get().branding;
-        let backgroundUrl = "themes/riot/img/backgrounds/valley.jpg";
+        let backgroundUrl = "https://riot.im/app/themes/riot/img/backgrounds/valley.jpg";
         if (brandingConfig && brandingConfig.welcomeBackgroundUrl) {
             backgroundUrl = brandingConfig.welcomeBackgroundUrl;
         }
@@ -35,6 +35,7 @@ export default class VectorAuthPage extends React.PureComponent {
         const pageStyle = {
             background: `center/cover fixed url(${backgroundUrl})`,
         };
+
 
         const modalStyle = {
             position: 'relative',
@@ -66,7 +67,7 @@ export default class VectorAuthPage extends React.PureComponent {
                         { this.props.children }
                     </div>
                 </div>
-                <AuthFooter />
+                {/*<AuthFooter />*/}
             </div>
         );
     }
