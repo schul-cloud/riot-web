@@ -37,9 +37,9 @@ FROM ${FROM_IMAGE}
 COPY --from=builder /src/webapp /app
 
 # Insert wasm type into Nginx mime.types file so they load correctly, if its not included already.
-RUN ! grep -q "application/wasm" /etc/nginx/mime.types && sed -i '3i\ \ \ \ application/wasm wasm\;' /etc/nginx/mime.types
+RUN ! grep -q "application/wasm" /etc/nginx/mime.types && sed -i '3i\ \ \ \ application/wasm wasm\;' /etc/nginx/mime.types && echo "added" || echo "exists"
 
-RUN rm -v /etc/nginx/conf.d/default.conf
+RUN rm -vf /etc/nginx/conf.d/default.conf
 COPY nginx-embed.conf /etc/nginx/conf.d/
 
 RUN rm -rf /usr/share/nginx/html \
