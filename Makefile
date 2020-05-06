@@ -23,7 +23,8 @@ PROJECT_NAME ?= $(basename $(notdir $(GIT_REMOTE_URL)))
 
 DOCKER_BUILD_OPTIONS ?= --pull --no-cache --force-rm --rm
 DOCKER_PUSH_OPTIONS ?=
-DOCKER_IMAGE_NAME ?= docker.pkg.github.com/schul-cloud/$(PROJECT_NAME)/embed
+DOCKER_IMAGE_NAME ?= schul-cloud/riot-embed
+DOCKER_PATH ?= docker.pkg.github.com/schul-cloud/$(PROJECT_NAME)/embed
 DOCKER_VERSION_TAG ?= $(GIT_BRANCH)_v$(GIT_LATEST_VERSION_TAG)_$(GIT_SHA)
 ifeq ($(GIT_LATEST_VERSION_TAG),)
 DOCKER_VERSION_TAG = $(GIT_BRANCH)_$(GIT_SHA)
@@ -42,8 +43,13 @@ build: DOCKER_BUILD_OPTIONS += \
 build:
 	docker build $(DOCKER_BUILD_OPTIONS) "$(PROJECT_DIR)"
 
+.PHONY: tag
+tag:
+	docker tag "$(DOCKER_IMAGE_NAME)" $(DOCKER_PATH):$(DOCKER_VERSION_TAG)
+	docker tag "$(DOCKER_IMAGE_NAME)" $(DOCKER_PATH):$(DOCKER_SHA_TAG)
+
 .PHONY: push
 push: DOCKER_PUSH_OPTIONS +=
 push:
-	docker push $(DOCKER_PUSH_OPTIONS) $(DOCKER_IMAGE_NAME):$(DOCKER_VERSION_TAG)
-	docker push $(DOCKER_PUSH_OPTIONS) $(DOCKER_IMAGE_NAME):$(DOCKER_SHA_TAG)
+	docker push $(DOCKER_PUSH_OPTIONS) $(DOCKER_PATH):$(DOCKER_VERSION_TAG)
+	docker push $(DOCKER_PUSH_OPTIONS) $(DOCKER_PATH):$(DOCKER_SHA_TAG)

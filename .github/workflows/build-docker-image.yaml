@@ -16,12 +16,16 @@ jobs:
               run: make build
 
             - name: Docker login
-              run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p $GITHUB_TOKEN
+              run: echo $GITHUB_TOKEN | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
+              #run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p $GITHUB_TOKEN
               env:
                 GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
             #- name: Log into registry
             #  run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login ${{ secrets.DOCKER_HOST }} -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+            - name: Tag image
+              run: make tag
 
             - name: Push image
               run: make push
