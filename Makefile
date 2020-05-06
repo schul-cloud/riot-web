@@ -48,6 +48,7 @@ build:
 tag:
 	docker tag "$(DOCKER_IMAGE_NAME)" $(DOCKER_PATH):$(DOCKER_VERSION_TAG)
 	docker tag "$(DOCKER_IMAGE_NAME)" $(DOCKER_PATH):$(DOCKER_SHA_TAG)
+	docker tag "$(DOCKER_IMAGE_NAME)" $(DOCKER_PATH):latest
 
 .PHONY: push
 push: DOCKER_PUSH_OPTIONS +=
