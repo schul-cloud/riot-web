@@ -97,10 +97,12 @@ function applyPassedParameters() {
     // setup base on config
     const userId = getDatasetConfig("matrixUserId");
     const homeserverUrl = getDatasetConfig("matrixHomeserverUrl");
+    const deviceId = getDatasetConfig("matrixDeviceId");
     const accessToken = getDatasetConfig("matrixAccessToken");
     if (userId && homeserverUrl && accessToken) {
         localStorage.setItem("mx_hs_url", homeserverUrl);
         localStorage.setItem("mx_user_id", userId);
+        localStorage.setItem("mx_device_id", deviceId);
         localStorage.setItem("mx_access_token", accessToken);
         localStorage.setItem("mx_is_guest", "false");
     } else if (userId || homeserverUrl || accessToken) {

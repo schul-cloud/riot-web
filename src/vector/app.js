@@ -244,10 +244,9 @@ async function verifyServerConfig() {
     } catch (e) {
         const {hsUrl, isUrl, userId} = Lifecycle.getLocalStorageSessionVars();
         if (hsUrl && userId) {
-            console.error(e);
-            console.warn("A session was found - suppressing config error and using the session's homeserver");
-
-            console.log("Using pre-existing hsUrl and isUrl: ", {hsUrl, isUrl});
+            //console.error(e);
+            //console.warn("A session was found - suppressing config error and using the session's homeserver");
+            //console.log("Using pre-existing hsUrl and isUrl: ", {hsUrl, isUrl});
             validatedConfig = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl, true);
         } else {
             // the user is not logged in, so scream
