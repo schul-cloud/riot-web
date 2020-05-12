@@ -17,7 +17,7 @@ module.exports = (env, argv) => {
     // If the assets of the embedded chat will be hosted somewhere else than in the relative folder /bundle
     // on the same server, a public path can be configured which points to your cdn or another folder.
     // Only used in production mode:
-    let publicPath = process.env.PUBLIC_PATH || 'https://embed.stomt.com/'; // 'https://your.cdn.com/
+    let publicPath = process.env.PUBLIC_PATH || '';
 
     const development = {};
     if (argv.mode !== "production") {
@@ -286,10 +286,11 @@ module.exports = (env, argv) => {
                                 esModule: false,
                                 name: '[name].[hash:7].[ext]',
                                 outputPath: getImgOutputPath,
-                                publicPath: function(url, resourcePath) {
-                                    const outputPath = getImgOutputPath(url, resourcePath);
-                                    return toPublicPath(outputPath, publicPath);
-                                },
+                                // publicPath is set dynamically at runtime using __webpack_public_path__
+                                // publicPath: function(url, resourcePath) {
+                                //     const outputPath = getImgOutputPath(url, resourcePath);
+                                //     return toPublicPath(outputPath, publicPath);
+                                // },
                             },
                         },
                     ],
@@ -347,6 +348,12 @@ module.exports = (env, argv) => {
                 filename: 'usercontent/index.html',
                 minify: argv.mode === 'production',
                 chunks: ['usercontent'],
+            }),
+
+            new webpack.BannerPlugin({
+               banner: "if (typeof window !== 'undefined' && window.matrixPublicPath) {__webpack_public_path__ = window.matrixPublicPath;}",
+               raw: true,
+               test: /\.(ts|js)x?$/,
             }),
         ],
 

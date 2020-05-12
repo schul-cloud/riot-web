@@ -22,6 +22,25 @@ limitations under the License.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
 
+// eslint-disable-next-line camelcase
+declare var __webpack_public_path__:string;
+
+function getDatasetConfig(option: string) {
+    const matrixChatNode = document.getElementById('matrixchat');
+    return matrixChatNode.dataset[option];
+}
+
+// Set public path to allow dynamic domains https://webpack.js.org/guides/public-path/#on-the-fly
+if (getDatasetConfig("vectorBundleScript")) {
+    const match = getDatasetConfig("vectorBundleScript").match(/(.*)bundles\/(.*)\/bundle\.js$/);
+    if (match && match.length > 2) {
+        // eslint-disable-next-line camelcase
+        __webpack_public_path__ = match[1];
+        (<any>window).matrixPublicPath = match[1];
+        // const hash = match[2];
+    }
+}
+
 require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 
@@ -81,16 +100,9 @@ function checkBrowserFeatures() {
     return featureComplete;
 }
 
-// eslint-disable-next-line camelcase
-declare var __webpack_public_path__:string;
 function getPublicPath() {
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line no-undef,camelcase
     return __webpack_public_path__ || '';
-}
-
-function getDatasetConfig(option: string) {
-    const matrixChatNode = document.getElementById('matrixchat');
-    return matrixChatNode.dataset[option];
 }
 
 function applyPassedParameters() {

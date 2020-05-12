@@ -44,6 +44,7 @@
     <section
         id="matrixchat"
 
+        data-vector-bundle-script="<%= htmlWebpackPlugin.files.chunks['bundle'].entry %>"
         data-vector-indexeddb-worker-script="<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>"
         data-vector-config="/config.json"
         data-vector-default-toggled="true"

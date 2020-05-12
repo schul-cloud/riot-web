@@ -34,11 +34,8 @@ yarn start
 DEPLOY
 
 If the assets of the embedded chat will be hosted somewhere else than in the relative folder
-/bundle/ on the same server, a public path can be configured which points to your cdn or another folder.
-It is located in the `webpack.config.js`:
-```
-publicPath = 'https://your.cdn.com/';
-```
+/bundle/ on the same server, the public path is set dynamically when loading the messenger, therefore
+the conainer can be be deployed on any domain.
 
 DOCKER
 
@@ -50,7 +47,6 @@ docker build -t schul-cloud/riot-embed \
     --build-arg REACT_SDK_BRANCH="feature/embed" \
     --build-arg JS_SDK_REPO="https://github.com/matrix-org/matrix-js-sdk.git" \
     --build-arg JS_SDK_BRANCH="develop" \
-    --build-arg PUBLIC_PATH="https://embed.messenger.schule/" \
     .
 ```
 
@@ -62,7 +58,6 @@ docker build -t schul-cloud/riot-embed \
     --build-arg REACT_SDK_BRANCH="feature/embed" \
     --build-arg JS_SDK_REPO="https://github.com/matrix-org/matrix-js-sdk.git" \
     --build-arg JS_SDK_BRANCH="develop" \
-    --build-arg PUBLIC_PATH="https://embed.messenger.schule/" \
     --build-arg FROM_IMAGE="schul-cloud/riot-embed:latest" \
     .
 ```
@@ -384,7 +379,7 @@ modifying it. See the [configuration docs](docs/config.md) for details.
 
 Open http://127.0.0.1:8080/ in your browser to see your newly built Riot.
 
-**Note**: The build script uses inotify by default on Linux to monitor directories 
+**Note**: The build script uses inotify by default on Linux to monitor directories
 for changes. If the inotify watch limit is too low your build will silently fail.
 To avoid this issue, we recommend a limit of at least 128M.
 

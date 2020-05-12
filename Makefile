@@ -39,7 +39,6 @@ build: DOCKER_BUILD_OPTIONS += \
     --build-arg REACT_SDK_BRANCH="feature/embed" \
     --build-arg JS_SDK_REPO="https://github.com/matrix-org/matrix-js-sdk.git" \
     --build-arg JS_SDK_BRANCH="master" \
-    --build-arg PUBLIC_PATH="https://embed.messenger.schule/" \
     --build-arg FROM_IMAGE="$(DOCKER_PATH):latest"
 build:
 	docker build $(DOCKER_BUILD_OPTIONS) "$(PROJECT_DIR)"
