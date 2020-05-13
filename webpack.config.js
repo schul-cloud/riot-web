@@ -50,6 +50,7 @@ module.exports = (env, argv) => {
             "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
             "theme-light-custom": "./node_modules/matrix-react-sdk/res/themes/light-custom/css/light-custom.scss",
             "theme-dark-custom": "./node_modules/matrix-react-sdk/res/themes/dark-custom/css/dark-custom.scss",
+            "theme-schul-cloud": "./node_modules/matrix-react-sdk/res/themes/schul-cloud/css/schul-cloud.scss",
         },
 
         optimization: {
