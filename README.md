@@ -1,6 +1,11 @@
 Riot Embed
 ==========
 
+Sample
+======
+
+https://schul-cloud.github.io/riot-embed-sample/
+
 Setup
 =====
 
@@ -46,24 +51,9 @@ docker build -t schul-cloud/riot-embed \
     --build-arg REACT_SDK_REPO="https://github.com/schul-cloud/matrix-react-sdk.git" \
     --build-arg REACT_SDK_BRANCH="feature/embed" \
     --build-arg JS_SDK_REPO="https://github.com/matrix-org/matrix-js-sdk.git" \
-    --build-arg JS_SDK_BRANCH="develop" \
+    --build-arg JS_SDK_BRANCH="master" \
     .
 ```
-
-All following releases should build on top of the previous to be backwards compatible:
-```
-docker build -t schul-cloud/riot-embed \
-    --build-arg USE_CUSTOM_SDKS=true \
-    --build-arg REACT_SDK_REPO="https://github.com/schul-cloud/matrix-react-sdk.git" \
-    --build-arg REACT_SDK_BRANCH="feature/embed" \
-    --build-arg JS_SDK_REPO="https://github.com/matrix-org/matrix-js-sdk.git" \
-    --build-arg JS_SDK_BRANCH="develop" \
-    --build-arg FROM_IMAGE="schul-cloud/riot-embed:latest" \
-    .
-```
-
-
-
 
 ---- Original Riot Readme below ----
 

@@ -18,7 +18,8 @@ typeof window.Matrix !== 'undefined' && window.Matrix.init || function (win, doc
             const riotBox = doc.createElement('section');
             riotBox.id = 'matrixchat';
             riotBox.dataset.vectorIndexeddbWorkerScript = options.indexeddbWorkerScript;
-            riotBox.dataset.vectorConfig = options.riotConfig;
+            riotBox.dataset.vectorConfig = options.riotConfig || '';
+            riotBox.dataset.vectorDefaultToggled = options.defaultToggled === true ? 'true' : 'false';
             riotBox.dataset.vectorForceToggled = options.forceToggled === true ? 'true' : '';
             riotBox.dataset.matrixLang = options.language || '';
             riotBox.dataset.matrixRoomId = options.roomId || '';

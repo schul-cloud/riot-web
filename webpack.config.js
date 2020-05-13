@@ -400,6 +400,11 @@ module.exports = (env, argv) => {
             // This hides the massive list of modules.
             stats: 'minimal',
 
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': '*',
+            },
+
             // hot module replacement doesn't work (I think we'd need react-hot-reload?)
             // so webpack-dev-server reloads the page on every update which is quite
             // tedious in Riot since that can take a while.
