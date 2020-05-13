@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const FileManagerPlugin = require('filemanager-webpack-plugin');
 const webpack = require("webpack");
 
 let og_image_url = process.env.RIOT_OG_IMAGE_URL;
@@ -37,6 +38,7 @@ module.exports = (env, argv) => {
         ...development,
 
         entry: {
+            "embed": "./src/vector/embed.ts",
             "bundle": "./src/vector/index.ts",
             "indexeddb-worker": "./src/vector/indexeddb-worker.js",
             "mobileguide": "./src/vector/mobile_guide/index.js",
@@ -286,7 +288,7 @@ module.exports = (env, argv) => {
                                 esModule: false,
                                 name: '[name].[hash:7].[ext]',
                                 outputPath: getImgOutputPath,
-                                // publicPath is set dynamically at runtime using __webpack_public_path__
+                                // PublicPath is instead set dynamically at runtime using __webpack_public_path__
                                 // publicPath: function(url, resourcePath) {
                                 //     const outputPath = getImgOutputPath(url, resourcePath);
                                 //     return toPublicPath(outputPath, publicPath);
@@ -350,10 +352,26 @@ module.exports = (env, argv) => {
                 chunks: ['usercontent'],
             }),
 
+            // Ensure that all chunks make use of the passed public_path and have access to the latest version hash
             new webpack.BannerPlugin({
-               banner: "if (typeof window !== 'undefined' && window.matrixPublicPath) {__webpack_public_path__ = window.matrixPublicPath;}",
+               banner: `
+               if (typeof window !== 'undefined') {
+                 window.matrixHash = '[hash]';
+                 if (window.matrixPublicPath) {
+                   __webpack_public_path__ = window.matrixPublicPath;
+                 }
+               }`,
                raw: true,
                test: /\.(ts|js)x?$/,
+            }),
+
+            // The embed.js script should be accessible without knowing the latest version hash
+            new FileManagerPlugin({
+                onEnd: {
+                    copy: [
+                        { source: "./webapp/bundles/[hash]/embed.js", destination: "./webapp/embed.js"},
+                    ],
+                }
             }),
         ],
 

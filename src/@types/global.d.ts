@@ -27,6 +27,11 @@ declare global {
         mxSendRageshake: (text: string, withLogs?: boolean) => void;
         matrixChat: ReturnType<Renderer>;
 
+        // embed
+        Matrix: any;
+        matrixHash: string;
+        matrixPublicPath: string;
+
         // electron-only
         ipcRenderer: any;
     }
