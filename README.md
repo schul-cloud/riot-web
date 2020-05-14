@@ -1,18 +1,15 @@
-Riot Embed
-==========
+# Riot Embed
 
-Sample
-======
+## Sample
 
 https://schul-cloud.github.io/riot-embed-sample/
 
-Setup
-=====
+## Setup
 
-Much of the functionality in Riot is actually in the `matrix-react-sdk` module. It is possible to set these up in a way that makes it
-easy to track the `feature/embed` branches in git and to make local changes without
-having to manually rebuild each time.
-
+Much of the functionality in Riot is actually in the `matrix-react-sdk` module.
+It is possible to set these up in a way that makes it easy to track the
+`feature/embed` branches in git and to make local changes without having to
+manually rebuild each time.
 
 Then similarly with `matrix-react-sdk`:
 
@@ -36,13 +33,14 @@ yarn install
 yarn start
 ```
 
-DEPLOY
+## Deploy
 
-If the assets of the embedded chat will be hosted somewhere else than in the relative folder
-/bundle/ on the same server, the public path is set dynamically when loading the messenger, therefore
-the conainer can be be deployed on any domain.
+If the assets of the embedded chat will be hosted somewhere else than in the
+relative folder `/bundle` on the same server, the public path is set dynamically
+when loading the messenger, therefore the conainer can be be deployed on any
+domain.
 
-DOCKER
+## Docker
 
 To run the docker build with our dependencies run:
 ```
@@ -53,6 +51,59 @@ docker build -t schul-cloud/riot-embed \
     --build-arg JS_SDK_REPO="https://github.com/matrix-org/matrix-js-sdk.git" \
     --build-arg JS_SDK_BRANCH="master" \
     .
+```
+
+### Using make
+
+It is possible to use make for lots of tasks. The main tasks (also called
+*Double-Colon Rules*) are defined in `Makefile`, see https://www.gnu.org/software/make/manual/make.html
+for more details. These main tasks can be expanded in included files
+(`Makefile.*`).
+
+**IMPORTANT NOTICE:** The main `Makefile` contains general, overall standard
+rules and settings for different Schul-Cloud projects. For project-specific
+rules and settings the custom include files (`Makefile.*`) should be used.
+Changes to the main `Makefile` can be lost (i.e. when using `make self-init` or
+`make self-update`).
+
+The main tasks in the `Makefile` use many different variables that can be
+customized when executing `make` (i.e. `make build PROJECT_NAME=foo`).
+
+The following make targets exist:
+
+- build: Builds the docker image.
+```
+make build
+```
+
+- tag: Create tags for the docker image.
+```
+make tags
+```
+
+- push: Push docker image tags.
+```
+make push
+```
+
+- run: Runs the docker container.
+```
+make run
+```
+
+- exec: Exec shell in the docker container.
+```
+make exec
+```
+
+- stop: Stops the docker container.
+```
+make stop
+```
+
+- clean: Cleanup docker containers and images.
+```
+make clean
 ```
 
 ---- Original Riot Readme below ----
@@ -97,12 +148,12 @@ To host your own copy of Riot, the quickest bet is to use a pre-built
 released version of Riot:
 
 1. Download the latest version from https://github.com/vector-im/riot-web/releases
-1. Untar the tarball on your web server
-1. Move (or symlink) the `riot-x.x.x` directory to an appropriate name
-1. Configure the correct caching headers in your webserver (see below)
-1. If desired, copy `config.sample.json` to `config.json` and edit it
+2. Untar the tarball on your web server
+3. Move (or symlink) the `riot-x.x.x` directory to an appropriate name
+4. Configure the correct caching headers in your webserver (see below)
+5. If desired, copy `config.sample.json` to `config.json` and edit it
    as desired. See the [configuration docs](docs/config.md) for details.
-1. Enter the URL into your browser and log into Riot!
+6. Enter the URL into your browser and log into Riot!
 
 Releases are signed using gpg and the OpenPGP standard, and can be checked against the public key located
 at https://packages.riot.im/riot-release-key.asc.
