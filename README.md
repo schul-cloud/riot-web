@@ -33,6 +33,18 @@ yarn install
 yarn start
 ```
 
+## Develop
+
+Run `yarn start` to built and watch the project locally.
+The embedded client will be accessible via http://localhost:8080/testing.html
+
+To log in to an actual Matrix Server enter your detail in `src/vector/index`:
+```
+    data-matrix-homeserver-url=""
+    data-matrix-user-id=""
+    data-matrix-access-token=""
+```
+
 ## Deploy
 
 If the assets of the embedded chat will be hosted somewhere else than in the
@@ -105,6 +117,7 @@ make stop
 ```
 make clean
 ```
+
 
 ---- Original Riot Readme below ----
 

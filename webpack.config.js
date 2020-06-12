@@ -317,6 +317,7 @@ module.exports = (env, argv) => {
             // This is the app's main entry point.
             new HtmlWebpackPlugin({
                 template: './src/vector/index.html',
+                filename: 'testing.html',
 
                 // we inject the links ourselves via the template, because
                 // HtmlWebpackPlugin will screw up our formatting like the names
