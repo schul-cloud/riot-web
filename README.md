@@ -14,7 +14,7 @@ manually rebuild each time.
 Then similarly with `matrix-react-sdk`:
 
 ```bash
-git clone https://github.com/maxklenk/matrix-react-sdk.git
+git clone https://github.com/schul-cloud/matrix-react-sdk.git
 pushd matrix-react-sdk
 git checkout feature/embed
 yarn link
@@ -25,7 +25,7 @@ popd
 Finally, build and start Riot itself:
 
 ```bash
-git clone https://github.com/maxklenk/riot-web.git
+git clone https://github.com/schul-cloud/riot-web.git
 cd riot-web
 git checkout feature/embed
 yarn link matrix-react-sdk
