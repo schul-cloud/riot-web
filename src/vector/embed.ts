@@ -21,6 +21,7 @@ typeof window.Matrix !== 'undefined' && window.Matrix.init || function (win, doc
             riotBox.dataset.vectorConfig = options.riotConfig || '';
             riotBox.dataset.vectorDefaultToggled = options.defaultToggled === true ? 'true' : 'false';
             riotBox.dataset.vectorForceToggled = options.forceToggled === true ? 'true' : '';
+            riotBox.dataset.vectorBlockRoomCreation = options.blockRoomCreation === true ? 'true' : '';
             riotBox.dataset.matrixLang = options.language || '';
             riotBox.dataset.matrixRoomId = options.roomId || '';
             riotBox.dataset.matrixHomeserverUrl = options.homeserverUrl || '';
@@ -46,6 +47,7 @@ typeof window.Matrix !== 'undefined' && window.Matrix.init || function (win, doc
     // 		assetDomain: 'https://cdn.domain/,
     // 		language: 'de',                         // (optional)
     // 		forceToggled: true,                     // (optional)
+    // 		blockRoomCreation: false,               // (optional)
     // 		roomId: '#xxxx:servername',             // (optional)
     // 		homeserverUrl: 'https://matrix.domain', // (optional if already in localstorage)
     // 		userId: '@xxxx:servername',             // (optional if already in localstorage)

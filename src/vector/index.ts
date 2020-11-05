@@ -31,7 +31,7 @@ require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
-import {parseQsFromFragment} from "./url_utils";
+import { parseQsFromFragment } from "./url_utils";
 import './modernizr';
 
 // load service worker if available on this platform
@@ -87,7 +87,7 @@ function checkBrowserFeatures() {
 }
 
 // eslint-disable-next-line camelcase
-declare var __webpack_public_path__:string;
+declare var __webpack_public_path__: string;
 function getPublicPath() {
     // eslint-disable-next-line no-undef,camelcase
     return __webpack_public_path__ || '';
@@ -96,6 +96,11 @@ function getPublicPath() {
 function getDatasetConfig(option: string) {
     const matrixChatNode = document.getElementById('matrixchat');
     return matrixChatNode.dataset[option];
+}
+
+function addCssClass(cssClass: string) {
+    const matrixChatNode = document.getElementById('matrixchat');
+    matrixChatNode.classList.add(cssClass);
 }
 
 function applyPassedParameters() {
@@ -135,6 +140,11 @@ function applyPassedParameters() {
         // only set default if not already set
         localStorage.setItem("mx_room_toggled", toggled ? "true" : "false");
         localStorage.setItem("mx_menu_toggled", toggled ? "true" : "false");
+    }
+
+    // Hide room creation for user
+    if (getDatasetConfig("vectorBlockRoomCreation")) {
+        addCssClass("block-room-creation");
     }
 }
 
@@ -236,7 +246,7 @@ async function start() {
             if (error.err && error.err instanceof SyntaxError) {
                 return showError(_t("Your Riot is misconfigured"), [
                     _t("Your Riot configuration contains invalid JSON. Please correct the problem and reload the page."),
-                    _t("The message from the parser is: %(message)s", { message: error.err.message || _t("Invalid JSON")}),
+                    _t("The message from the parser is: %(message)s", { message: error.err.message || _t("Invalid JSON") }),
                 ]);
             }
             return showError(_t("Unable to load config file: please refresh the page to try again."));
